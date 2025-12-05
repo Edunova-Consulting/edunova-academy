@@ -58,7 +58,28 @@ export class StudentsComponent implements OnInit {
     this.password = '';
   }
 
-  saveStudent() {
+  async saveStudent(){
+    try{
+      if(this.editingStudent){
+        await this.studentService.updateStudent(this.editingStudent.id, this.formData).toPromise();
+        console.log('Student updated successfully');
+      }
+      else{
+        //Nuevo estudiante: necesitamos password
+        const password = this.password;
+        const newStudent = await this.studentService.createStudent(this.formData, password);
+        console.log('Student created successfully:', newStudent);
+      }
+
+      this.loadStudents();
+      this.closeForm();
+
+    } catch(error:any){
+      console.error('Error saving student:', error);
+    }
+  }
+
+  /*saveStudent() {
     if (this.editingStudent) {
       this.studentService.updateStudent(this.editingStudent.id, this.formData).subscribe({
         next: () => {
@@ -68,7 +89,7 @@ export class StudentsComponent implements OnInit {
         error: (error) => console.error('Error updating student:', error)
       });
     } else {
-      this.studentService.createStudent(this.formData).subscribe({
+      this.studentService.createStudent(this.formData,).subscribe({
         next: () => {
           this.loadStudents();
           this.closeForm();
@@ -76,7 +97,7 @@ export class StudentsComponent implements OnInit {
         error: (error) => console.error('Error creating student:', error)
       });
     }
-  }
+  }*/
 
   deleteStudent(id: string) {
     if (confirm('Are you sure you want to delete this student?')) {

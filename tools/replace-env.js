@@ -8,6 +8,14 @@ let content = fs.readFileSync(
   'utf8'
 );
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('ERROR: Las variables de entorno SUPABASE_URL o SUPABASE_ANON_KEY no están definidas');
+  process.exit(1);
+}
+
 content = content
   .replace('__SUPABASE_URL__', process.env.SUPABASE_URL)
   .replace('__SUPABASE_ANON_KEY__', process.env.SUPABASE_ANON_KEY);

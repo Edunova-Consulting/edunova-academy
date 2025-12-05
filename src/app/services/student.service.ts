@@ -4,12 +4,16 @@ import { Student } from '../models/student.model';
 import { UserRole } from '../models/user.model';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private authService: AuthService
+  ) {}
 
   getStudents(): Observable<Student[]> {
     return from(
@@ -32,7 +36,28 @@ export class StudentService {
     ).pipe(map((result: any) => result.data));
   }
 
-  createStudent(student: Partial<Student>): Observable<Student> {
+  async createStudent(student: Partial<Student>, password: string): Promise<Student>{
+    //Crear usuario en Auth
+    const { error } = await this.authService.signUp(
+      student.email!,
+      password,
+      UserRole.Student,
+      {
+        first_name: student.first_name,
+        last_name: student.last_name,
+        phone: student.phone,
+        enrollment_date: student.enrollment_date
+      }
+    );
+    
+    if (error) throw error;
+
+    //recuperar perfil creado
+    const newStudent = await this.authService.getCurrentUser();
+    return newStudent as Student;
+  }
+
+  /*createStudent(student: Partial<Student>): Observable<Student> {
     const studentData = {
       ...student,
       role: UserRole.Student
@@ -44,7 +69,7 @@ export class StudentService {
         .select()
         .single()
     ).pipe(map((result: any) => result.data));
-  }
+  }*/
 
   updateStudent(id: string, student: Partial<Student>): Observable<Student> {
     return from(
