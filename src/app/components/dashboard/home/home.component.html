@@ -1,0 +1,24 @@
+<div class="home-container">
+  <h1>Welcome to Edunova Academy</h1>
+  <p>Welcome, {{ user?.email }}!</p>
+  <p>Role: <strong>{{ user?.role }}</strong></p>
+
+  <div class="info-section">
+    <h2>What you can do:</h2>
+    <ul *ngIf="isAdmin">
+      <li>Manage Courses, Classes, and Assignments</li>
+      <li>Manage Teachers and Students</li>
+      <li>Assign Teachers and Students to Courses</li>
+    </ul>
+    <ul *ngIf="isTeacher">
+      <li>Create and manage Classes for your Courses</li>
+      <li>Create and manage Assignments</li>
+      <li>Assign Students to Courses</li>
+    </ul>
+    <ul *ngIf="isStudent">
+      <li>View Courses and Classes</li>
+      <li>View and update your Assignments</li>
+    </ul>
+  </div>
+</div>
+

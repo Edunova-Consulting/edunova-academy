@@ -1,0 +1,55 @@
+<div class="classes-container">
+  <div class="header">
+    <h2>Classes</h2>
+    <button (click)="openCreateForm()" class="btn-primary">Create Class</button>
+  </div>
+
+  <div *ngIf="showForm" class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editingClass ? 'Edit Class' : 'Create Class' }}</h3>
+      <form (ngSubmit)="saveClass()">
+        <div class="form-group">
+          <label>Course</label>
+          <select [(ngModel)]="formData.course_id" name="course_id" required>
+            <option value="">Select a course</option>
+            <option *ngFor="let course of courses" [value]="course.id">{{ course.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="formData.name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="formData.description" name="description" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Scheduled Date</label>
+          <input type="datetime-local" [(ngModel)]="formData.scheduled_date" name="scheduled_date" />
+        </div>
+        <div class="form-actions">
+          <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="classes-grid">
+    <div *ngFor="let classItem of classes" class="class-card">
+      <h3>{{ classItem.name }}</h3>
+      <p><strong>Course:</strong> {{ getCourseName(classItem.course_id) }}</p>
+      <p>{{ classItem.description || 'No description' }}</p>
+      <p *ngIf="classItem.scheduled_date"><strong>Scheduled:</strong> {{ classItem.scheduled_date | date:'short' }}</p>
+      <div class="card-actions">
+        <button (click)="openEditForm(classItem)" class="btn-edit">Edit</button>
+        <button (click)="deleteClass(classItem.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="classes.length === 0" class="empty-state">
+    <p>No classes found. Create your first class!</p>
+  </div>
+</div>
+

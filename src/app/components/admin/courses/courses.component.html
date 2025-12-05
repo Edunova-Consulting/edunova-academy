@@ -1,0 +1,42 @@
+<div class="courses-container">
+  <div class="header">
+    <h2>Courses</h2>
+    <button (click)="openCreateForm()" class="btn-primary">Create Course</button>
+  </div>
+
+  <div *ngIf="showForm" class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editingCourse ? 'Edit Course' : 'Create Course' }}</h3>
+      <form (ngSubmit)="saveCourse()">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="formData.name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="formData.description" name="description" rows="4"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="courses-grid">
+    <div *ngFor="let course of courses" class="course-card">
+      <h3>{{ course.name }}</h3>
+      <p>{{ course.description || 'No description' }}</p>
+      <div class="card-actions">
+        <button (click)="openEditForm(course)" class="btn-edit">Edit</button>
+        <button (click)="deleteCourse(course.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="courses.length === 0" class="empty-state">
+    <p>No courses found. Create your first course!</p>
+  </div>
+</div>
+

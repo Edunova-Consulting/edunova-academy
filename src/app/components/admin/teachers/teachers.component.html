@@ -1,0 +1,55 @@
+<div class="teachers-container">
+  <div class="header">
+    <h2>Teachers</h2>
+    <button (click)="openCreateForm()" class="btn-primary">Create Teacher</button>
+  </div>
+
+  <div *ngIf="showForm" class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editingTeacher ? 'Edit Teacher' : 'Create Teacher' }}</h3>
+      <form (ngSubmit)="saveTeacher()">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="formData.email" name="email" required [readonly]="!!editingTeacher" />
+        </div>
+        <div *ngIf="!editingTeacher" class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" [(ngModel)]="formData.first_name" name="first_name" />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" [(ngModel)]="formData.last_name" name="last_name" />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" [(ngModel)]="formData.phone" name="phone" />
+        </div>
+        <div class="form-actions">
+          <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="teachers-grid">
+    <div *ngFor="let teacher of teachers" class="teacher-card">
+      <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h3>
+      <p><strong>Email:</strong> {{ teacher.email }}</p>
+      <p *ngIf="teacher.phone"><strong>Phone:</strong> {{ teacher.phone }}</p>
+      <div class="card-actions">
+        <button (click)="openEditForm(teacher)" class="btn-edit">Edit</button>
+        <button (click)="deleteTeacher(teacher.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="teachers.length === 0" class="empty-state">
+    <p>No teachers found. Create your first teacher!</p>
+  </div>
+</div>
+

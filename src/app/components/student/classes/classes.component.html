@@ -1,0 +1,17 @@
+<div class="classes-container">
+  <h2>Classes</h2>
+
+  <div class="classes-grid">
+    <div *ngFor="let classItem of classes" class="class-card">
+      <h3>{{ classItem.name }}</h3>
+      <p><strong>Course:</strong> {{ getCourseName(classItem.course_id) }}</p>
+      <p>{{ classItem.description || 'No description' }}</p>
+      <p *ngIf="classItem.scheduled_date"><strong>Scheduled:</strong> {{ classItem.scheduled_date | date:'short' }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="classes.length === 0" class="empty-state">
+    <p>No classes available.</p>
+  </div>
+</div>
+

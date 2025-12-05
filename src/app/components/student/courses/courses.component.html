@@ -1,0 +1,15 @@
+<div class="courses-container">
+  <h2>Courses</h2>
+
+  <div class="courses-grid">
+    <div *ngFor="let course of courses" class="course-card">
+      <h3>{{ course.name }}</h3>
+      <p>{{ course.description || 'No description' }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="courses.length === 0" class="empty-state">
+    <p>No courses available.</p>
+  </div>
+</div>
+

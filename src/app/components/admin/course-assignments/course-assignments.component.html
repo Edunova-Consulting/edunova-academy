@@ -1,0 +1,72 @@
+<div class="course-assignments-container">
+  <h2>Course Assignments</h2>
+
+  <div class="course-selector">
+    <label>Select Course:</label>
+    <select [ngModel]="selectedCourse?.id" (ngModelChange)="onCourseChange($event)">
+      <option [value]="null">-- Select a course --</option>
+      <option *ngFor="let course of courses" [value]="course.id">{{ course.name }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedCourse" class="assignments-content">
+    <div class="section">
+      <div class="section-header">
+        <h3>Teachers</h3>
+        <button (click)="openTeacherForm()" class="btn-primary">Assign Teacher</button>
+      </div>
+      <div class="list">
+        <div *ngFor="let ct of courseTeachers" class="list-item">
+          <span>{{ ct.teachers?.first_name }} {{ ct.teachers?.last_name }} ({{ ct.teachers?.email }})</span>
+        </div>
+        <div *ngIf="courseTeachers.length === 0" class="empty">No teachers assigned</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h3>Students</h3>
+        <button (click)="openStudentForm()" class="btn-primary">Assign Student</button>
+      </div>
+      <div class="list">
+        <div *ngFor="let cs of courseStudents" class="list-item">
+          <span>{{ cs.students?.first_name }} {{ cs.students?.last_name }} ({{ cs.students?.email }})</span>
+        </div>
+        <div *ngIf="courseStudents.length === 0" class="empty">No students assigned</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showTeacherForm" class="modal-overlay" (click)="closeForms()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Assign Teacher to {{ selectedCourse?.name }}</h3>
+      <select [(ngModel)]="selectedTeacherId">
+        <option value="">-- Select a teacher --</option>
+        <option *ngFor="let teacher of teachers" [value]="teacher.id">
+          {{ teacher.first_name }} {{ teacher.last_name }} ({{ teacher.email }})
+        </option>
+      </select>
+      <div class="form-actions">
+        <button type="button" (click)="closeForms()" class="btn-secondary">Cancel</button>
+        <button type="button" (click)="assignTeacher()" class="btn-primary" [disabled]="!selectedTeacherId">Assign</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showStudentForm" class="modal-overlay" (click)="closeForms()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Assign Student to {{ selectedCourse?.name }}</h3>
+      <select [(ngModel)]="selectedStudentId">
+        <option value="">-- Select a student --</option>
+        <option *ngFor="let student of students" [value]="student.id">
+          {{ student.first_name }} {{ student.last_name }} ({{ student.email }})
+        </option>
+      </select>
+      <div class="form-actions">
+        <button type="button" (click)="closeForms()" class="btn-secondary">Cancel</button>
+        <button type="button" (click)="assignStudent()" class="btn-primary" [disabled]="!selectedStudentId">Assign</button>
+      </div>
+    </div>
+  </div>
+</div>
+

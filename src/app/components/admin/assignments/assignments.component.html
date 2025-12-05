@@ -1,0 +1,60 @@
+<div class="assignments-container">
+  <div class="header">
+    <h2>Assignments</h2>
+    <button (click)="openCreateForm()" class="btn-primary">Create Assignment</button>
+  </div>
+
+  <div *ngIf="showForm" class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editingAssignment ? 'Edit Assignment' : 'Create Assignment' }}</h3>
+      <form (ngSubmit)="saveAssignment()">
+        <div class="form-group">
+          <label>Course</label>
+          <select [(ngModel)]="formData.course_id" name="course_id" required>
+            <option value="">Select a course</option>
+            <option *ngFor="let course of courses" [value]="course.id">{{ course.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="formData.title" name="title" required />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="formData.description" name="description" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="datetime-local" [(ngModel)]="formData.due_date" name="due_date" />
+        </div>
+        <div class="form-group">
+          <label>Max Score</label>
+          <input type="number" [(ngModel)]="formData.max_score" name="max_score" min="0" />
+        </div>
+        <div class="form-actions">
+          <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="assignments-grid">
+    <div *ngFor="let assignment of assignments" class="assignment-card">
+      <h3>{{ assignment.title }}</h3>
+      <p><strong>Course:</strong> {{ getCourseName(assignment.course_id) }}</p>
+      <p>{{ assignment.description || 'No description' }}</p>
+      <p *ngIf="assignment.due_date"><strong>Due:</strong> {{ assignment.due_date | date:'short' }}</p>
+      <p *ngIf="assignment.max_score"><strong>Max Score:</strong> {{ assignment.max_score }}</p>
+      <div class="card-actions">
+        <button (click)="openEditForm(assignment)" class="btn-edit">Edit</button>
+        <button (click)="deleteAssignment(assignment.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="assignments.length === 0" class="empty-state">
+    <p>No assignments found. Create your first assignment!</p>
+  </div>
+</div>
+
